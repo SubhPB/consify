@@ -1,0 +1,48 @@
+{
+  "name": "@consify/ansi",
+  "private": "false",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "./lib/cjs/index.js",
+  "types": "./lib/cjs/types/index.d.ts",
+  "scripts": {
+    "test": "mocha",
+    "clean": "cmd /c rmdir /s /q ./lib",
+    "clean:linux": "rm -rf ./lib",
+    "build:esm": "tsc -p ./tsconfigs/tsconfig.esm.json && cmd /c rename ./lib/esm/index.js ./lib/esm/index.mjs",
+    "build:esm:linux": "tsc -p ./tsconfigs/tsconfig.esm.json && mv ./lib/esm/index.js ./lib/esm/index.mjs",
+    "build:cjs": "tsc -p ./tsconfigs/tsconfig.cjs.json",
+    "build": "npm run clean && npm run build:esm && npm build:cjs",
+    "build:linux": "npm run clean:linux && npm run build:esm:linux && npm run build:cjs",
+    "prepack": "npm run build",
+    "prepack:linux": "npm run build:linux"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/types/index.d.ts",
+        "default": "./lib/esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/types/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "keywords": [],
+  "author": "@Byimaan/SubhPB",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.10",
+    "chai": "^5.1.2",
+    "mocha": "^11.1.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "extends":"./tsconfig.base.json",
+    "compilerOptions": {
+        "lib": ["ES6"], /*Which types to suggest by TS during development*/
+        "target": "ES6", /*JS version*/
+        "module": "CommonJS", /*File format*/
+        "moduleResolution": "node", /*Only supports *.js files*/
+        "outDir": "../lib/cjs",
+        "declarationDir": "../lib/cjs/types",/*Path of *.d.ts file*/
+    }
+}
