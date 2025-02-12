@@ -5,11 +5,11 @@
     "access": "public"
   },
   "version": "1.0.0",
-  "type": "commonjs",
-  "main": "./lib/cjs/index.js",
-  "types": "./lib/cjs/types/index.d.ts",
+  "type": "module",
+  "main": "./lib/esm/index.js",
+  "types": "./lib/esm/types/index.d.ts",
   "scripts": {
-    "test": "mocha",
+    "test": "npx mocha",
     "clean": "cmd /c rmdir /s /q ./lib",
     "clean:linux": "rm -rf ./lib",
     "build:esm": "tsc -p ./tsconfigs/tsconfig.esm.json && cmd /c rename ./lib/esm/index.js ./lib/esm/index.mjs",
@@ -35,7 +35,26 @@
   "files": [
     "lib/**/*"
   ],
-  "keywords": [],
+  "keywords": [
+    "ansi",
+    "ansi-colors",
+    "ansi-codes",
+    "console",
+    "console-utils",
+    "terminal",
+    "cli",
+    "text-formatting",
+    "colors",
+    "styling",
+    "escape-codes",
+    "command-line",
+    "logging",
+    "tty",
+    "stdout",
+    "chalk",
+    "ink",
+    "nodejs"
+  ],
   "author": "@Byimaan/SubhPB",
   "license": "ISC",
   "description": "",
@@ -44,5 +63,8 @@
     "@types/mocha": "^10.0.10",
     "chai": "^5.1.2",
     "mocha": "^11.1.0"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.2"
   }
 }
