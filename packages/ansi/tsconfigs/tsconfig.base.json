@@ -12,6 +12,6 @@
     },
     "files": [
         /*Ls of files to include in compilation*/
-        "../src/index.ts"
+        "../src/*"
     ]
 }
