@@ -1,5 +1,5 @@
 const ANSI_COLORS = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white'] as const;
-const ANSI_STYLES = ['reset', 'bold', 'dim', 'italic', 'underline', 'blink', 'reverse', 'hidden', 'strikethrough'] as const;
+const ANSI_STYLES = ['reset', 'bold', 'dim', 'italic', 'underline', 'blink', 'flashBlink', 'reverse', 'hidden', 'strikethrough'] as const;
 const DEFAULT_ANSI_PARAMETERS = {
     ST: 0, FG: 39, BG: 49
 };
