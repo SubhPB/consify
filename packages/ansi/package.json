@@ -10,6 +10,7 @@
   "types": "./lib/esm/types/index.d.ts",
   "scripts": {
     "test": "npx mocha",
+    "test:unit": "npx mocha --config .mocharc.unit.json",
     "clean": "cmd /c rmdir /s /q ./lib",
     "clean:linux": "rm -rf ./lib",
     "build:esm": "tsc -p ./tsconfigs/tsconfig.esm.json && cmd /c rename ./lib/esm/index.js ./lib/esm/index.mjs",
