@@ -1,5 +1,5 @@
 //CMD npx ts-node --project tsconfigs/tsconfig.base.json ./src/index.ts
-import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS } from "./shared/constants.ts";
+import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS} from "./shared/constants.ts";
 import type {COLOR, STYLE} from './shared/types.ts'
 
 class BASE {
@@ -14,7 +14,7 @@ class BASE {
 
 /**Goal: To provide more features, customization over output string to the end user */
 class BasePen extends BASE {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props=DEFAULT_ANSI_PARAMETERS,){
         super(props);
     };
     get prefix(){
@@ -22,7 +22,7 @@ class BasePen extends BASE {
         return `\x1b[${ST};${FG};${BG}m`
     };
     get suffix(){
-        return `\x1b[0m`
+        return `\x1b[0m`;``
     };
     getCallbackParams(){
         const params = {
@@ -37,7 +37,7 @@ class BasePen extends BASE {
     }
 }
 
-//Note: only a entity/element or subClient can extend a Client
+//Note: only a base/element or subClient can extend a Client
 abstract class BaseClient extends BASE {
     constructor(props=DEFAULT_ANSI_PARAMETERS){
         super(props)
@@ -177,6 +177,7 @@ abstract class StyleBaseClient extends CL {
 /**
  * Allows to continue define br color or br bg after defining the style.
  * Can define bright text color or either bright background color
+ * @example
  *   * underline.<br>.blue.write(text)
      * underline.<br>.bg.red.write(text)
      * underline.<br>.bg.red.blue.write(text)
@@ -240,5 +241,38 @@ class Style extends BASE {
 };
 interface Style extends Record<STYLE, StyleElem> {};
 
+/**
+ * IceBurg: contains every single feature offered in this whole package,
+ * Rather than injecting features directly from others, will inject by using additional IceBurg layers
+ */
+class IceBurgBASE extends StyleClient {
+    //To inject features like: ANSI.red, ANSI.bg..., ANSI.br..., ANSI.br.bg... etc
+    constructor(props=DEFAULT_ANSI_PARAMETERS){
+        super(props);
+    };
+};
+class IceBurgStyleElem extends StyleClient {
+    //To inject style features like: ANSI.underline..., ANSI.bold.br... etc
+    constructor(props=DEFAULT_ANSI_PARAMETERS){
+        super(props)
+    }
+};
 
-export {BG,BrBG,BrCL,CL,Style,ClElem,BgElem,StyleElem, StyleBr}
+class IceBurg extends IceBurgBASE {
+    protected calcST(si:number){return si;}
+    constructor(props=DEFAULT_ANSI_PARAMETERS){
+        super(props);
+        for(let si=0; si<ANSI_STYLES.length; si++){
+            const style = ANSI_STYLES[si];
+            Object.defineProperty(this, style, {
+                value: new IceBurgStyleElem({
+                    ...this.props,
+                    ST: this.calcST(si)
+                })
+            })
+        }
+    }
+};
+interface IceBurg extends Record<STYLE, IceBurgStyleElem>{};
+
+export {BG, BrBG, BrCL, CL, Style, ClElem, BgElem, StyleElem, StyleBr, IceBurgStyleElem, IceBurg}

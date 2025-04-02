@@ -1,56 +1,55 @@
-import { cl,CL, brCl,BrCL, st,ST, green  } from "../src/index.ts";
-import * as Core from '../src/core.ts'
-import { describe, it } from "mocha";
+import { ANSI_COLORS, ANSI_STYLES } from "../src/shared/constants.ts";
 import { expect } from "chai";
-import { ANSI_COLORS } from "../src/shared/constants.ts";
+import { describe } from "mocha";
+import { CL, BrCL, BG, BrBG, ST} from "../src/index.ts";
 
-// describe("Testing `cl` and `CL` functionalities!", ()=>{
-
-//     it("Instance type checking of 'cl'/'CL' and 'brCl'/'BrCL' and 'st'/'ST'.", ()=>{
-//         expect(cl).to.be.instanceof(Core.CL); // CL is explicitly been deeply tested in other test files.
-//         expect(brCl).to.be.instanceof(Core.BrCL); // So, not need to test object chaining in this file.
-//         expect(st).to.be.instanceof(Core.Style)
-
-//         expect(CL).to.be.a('function');
-//         expect(BrCL).to.be.a('function');
-//         expect(ST).to.be.a('function');
-
-//         expect(CL.length).to.equal(1);
-//         expect(BrCL.length).to.equal(1);
-//         expect(ST.length).to.equal(1);
-//     });
-
-    
-//     ANSI_COLORS.forEach(color => {
-//         it(`Testing CL("${color}"), BrCL("${color}")`, ()=>{
-//             expect(CL(color)).to.be.a('function');
-//             expect(BrCL(color)).to.be.a('function');
-//             expect(CL(color).length).to.equal(1);
-//             expect(BrCL(color).length).to.equal(1);
-//         });
-//         it(`Testing the return type behavior of CL("${color}")("text"), BrCL("${color}")("text") when passed with 'string' argument.`, ()=>{
-//             expect(CL(color)('text')).to.be.a.string;
-//             // expect(BrCL(color)('text')).to.be.a.string;
-
-//             expect(CL(color)(()=>'text')).to.be.equal('text');
-//             // expect(BrCL(color)(()=>'text')).to.be.equal('text');
-
-//             console.log(`✅ CL(${color})("text") produces: ${CL(color)(`This text is in ${color} color.`)}`);
-//             console.log(`✅ BrCL(${color})("text") produces: ${BrCL(color)(`This text is in bright ${color} color.`)}`);
-//         });
-//         it(`Testing behavior of CL("${color}")(${st.bold.red.write("CallbackFn")})`, ()=>{
-            
-//         })
-//     })
-// })
-
-describe(`Testing 'green' fn `, ()=>{
-    it("Checking the output of 'green' fn", ()=>{
-        // const otpt = cl.green.write('This is a green text');
-        // const g = cl.green.write;
-        const otpt = CL('green')('This is a green text')
-        expect(otpt).to.be.a.string;
-        console.log(`# ${otpt}`)
+describe(`Testing 'CL'/'BrCL' fn`, ()=>{
+    ANSI_COLORS.forEach(cl => {
+        it(`Testing CL("${cl}")`, ()=>{
+            expect(CL(cl)('text')).to.be.string;
+            expect(CL(cl)(()=>'text')).to.be.string;
+            console.log(`✅ CL("${cl}")("text") produces: ${CL(cl)(`This is in ${cl} color`)}`);
+            console.log(`✅ CL("${cl}")(()=>"text") produces: ${CL(cl)(({prefix,suffix})=>prefix+`Injecting ${cl} color by callbackFn`+suffix)}`)
+        })
     });
+    ANSI_COLORS.forEach(brCl => {
+        it(`Testing BrCL("${brCl}")`, ()=>{
+            expect(BrCL(brCl)('text')).to.be.string;
+            expect(BrCL(brCl)(()=>'text')).to.be.string;
+            console.log(`✅ BrCL("${brCl}")("text") produces: ${BrCL(brCl)(`This is in bright-${brCl} color`)}`);
+            console.log(`✅ BrCL("${brCl}")(()=>"text") produces: ${BrCL(brCl)(({prefix,suffix})=>prefix+`Injecting bright-${brCl} color by callbackFn`+suffix)}`)
+        })
+    })
+});
 
+describe(`Testing 'BG'/'BrBG' fn`, ()=>{
+    ANSI_COLORS.forEach(bg => {
+        it(`Testing BG("${bg}")`, ()=>{
+            expect(BG(bg)('text')).to.be.string;
+            expect(BG(bg)(()=>'text')).to.be.string;
+            console.log(`✅ BG("${bg}")("text") produces: ${BG(bg)(`This is in ${bg} background color`)}`);
+            console.log(`✅ BG("${bg}")(()=>"text") produces: ${BG(bg)(({prefix,suffix})=>prefix+`Injecting ${bg} background color by callbackFn`+suffix)}`)
+        })
+    });
+    ANSI_COLORS.forEach(brBg => {
+        it(`Testing BrBG("${brBg}")`, ()=>{
+            expect(BrBG(brBg)('text')).to.be.string;
+            expect(BrBG(brBg)(()=>'text')).to.be.string;
+            console.log(`✅ BrBG("${brBg}")("text") produces: ${BrBG(brBg)(`This is in bright-${brBg} background color`)}`);
+            console.log(`✅ BrBG("${brBg}")(()=>"text") produces: ${BrBG(brBg)(({prefix,suffix})=>prefix+`Injecting bright-${brBg} background color by callbackFn`+suffix)}`)
+        })
+    })
+});
+
+describe(`Testing 'ST' fn`, ()=>{
+    ANSI_STYLES.forEach(st =>{
+        it(`Testing ST("${st}")`, ()=>{
+            expect(ST(st)('text')).to.be.string;
+            expect(ST(st)(()=>'text')).to.be.string;
+            console.log(`✅ ST("${st}")("text") produces: ${ST(st)(`This uses ${st} style`)}`);
+            console.log(`✅ ST("${st}")(() => "text") produces: ${ST(st)(({prefix,suffix})=>prefix+`Injecting ${st} style by callbackFn`+suffix)}`)
+            const str = CL('red')(ST('underline')('This is mixed case'))
+            console.log(`✅ ${str}`)
+        })
+    })
 })
