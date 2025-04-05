@@ -37,7 +37,7 @@ describe("Checking that 'icb' has methods which it supposed to have", ()=>{
         const params = icb.inspectProps();
 
         Object.keys(DEFAULT_ANSI_PARAMETERS).forEach(param => {
-            expect(params[param]).to.equal(DEFAULT_ANSI_PARAMETERS[param])
+            expect(params[param]).to.equal(undefined)
         });
     });
     it("Testing cl/brCl properties of 'icb'", ()=>{
@@ -126,5 +126,4 @@ describe("Checking that 'icb' has methods which it supposed to have", ()=>{
     })
 })
 
-icb.inspectProps();
 

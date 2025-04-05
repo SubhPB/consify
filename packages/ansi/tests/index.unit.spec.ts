@@ -48,7 +48,7 @@ describe(`Testing 'ST' fn`, ()=>{
             expect(ST(st)(()=>'text')).to.be.string;
             console.log(`✅ ST("${st}")("text") produces: ${ST(st)(`This uses ${st} style`)}`);
             console.log(`✅ ST("${st}")(() => "text") produces: ${ST(st)(({prefix,suffix})=>prefix+`Injecting ${st} style by callbackFn`+suffix)}`)
-            const str = CL('red')(ST('underline')('This is mixed case'))
+            const str = ST('italic')(CL('red')(`Hello! ${ST('underline')('This is mixed case (Blink+underline)')}`))
             console.log(`✅ ${str}`)
         })
     })

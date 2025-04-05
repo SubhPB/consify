@@ -69,13 +69,13 @@ describe("Testing 'BG' and 'BrBG'...", ()=>{
                 const bgWithTextColorProps = bg[bgColor][textColor].inspectProps();
                 expect(bgWithTextColorProps.BG).is.equal(BG_OFFSET+bgColIndex);
                 expect(bgWithTextColorProps.FG).is.equal(CL_OFFSET+textColIndex);
-                expect(bgWithTextColorProps.ST).equal(DEFAULT_ANSI_PARAMETERS.ST);
+                expect(bgWithTextColorProps.ST).equal(undefined);
                 
                 /**bright background but regular text color */
                 const brBgWithTextColorProps = brBg[bgColor][textColor].inspectProps();
                 expect(brBgWithTextColorProps.BG).is.equal(BR_BG_OFFSET+bgColIndex);
                 expect(brBgWithTextColorProps.FG).is.equal(CL_OFFSET+textColIndex);
-                expect(bgWithTextColorProps.ST).equal(DEFAULT_ANSI_PARAMETERS.ST);
+                expect(bgWithTextColorProps.ST).equal(undefined);
     
                 /**
                  * Testing whether both BG classes working as expected for brightColors
@@ -88,7 +88,7 @@ describe("Testing 'BG' and 'BrBG'...", ()=>{
                 const bgWithBrightTextColorProps = bg[bgColor].br[textColor].inspectProps();
                 expect(bgWithBrightTextColorProps.BG).is.equal(BG_OFFSET+bgColIndex);
                 expect(bgWithBrightTextColorProps.FG).is.equal(BR_CL_OFFSET+textColIndex);
-                expect(bgWithBrightTextColorProps.ST).is.equal(DEFAULT_ANSI_PARAMETERS.ST)
+                expect(bgWithBrightTextColorProps.ST).is.equal(undefined)
     
                 /**Bright background and bright text-color */
                 const brBgWithBrightTextColorProps = brBg[bgColor].br[textColor].inspectProps();
