@@ -63,9 +63,7 @@
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
     "chai": "^5.1.2",
-    "mocha": "^11.1.0"
-  },
-  "dependencies": {
+    "mocha": "^11.1.0",
     "ts-node": "^10.9.2"
   }
 }
