@@ -186,7 +186,7 @@ export function BrCL(color:COLOR):Core.ClElem['write']{
 
 
 const brightColors = Object.fromEntries(
-    ANSI_COLORS.map(color=>[`${color}Br`, brCl[color].write.bind(brCl)])
+    ANSI_COLORS.map(color=>[`${color}Br`, brCl[color].write.bind(brCl[color])])
 ) as {[key in `${COLOR}Br`]: Core.ClElem['write']};
 
 /**
@@ -328,7 +328,7 @@ export function BG(bgColor:COLOR):Core.BgElem['write']{
 
 
 const bgColors = Object.fromEntries(
-    ANSI_COLORS.map(bgColor => [`${bgColor}BG`, bg[bgColor].write.bind(bg)])
+    ANSI_COLORS.map(bgColor => [`${bgColor}BG`, bg[bgColor].write.bind(bg[bgColor])])
 ) as {[key in `${COLOR}BG`]: Core.BgElem['write']};
 // export const {blackBG, redBG, greenBG, yellowBG, blueBG, magentaBG, cyanBG, whiteBG} = bgColors;
 
@@ -460,7 +460,7 @@ export function BrBG(bgColor:COLOR):Core.BgElem['write']{
 };
 
 const brightBgColors = Object.fromEntries(
-    ANSI_COLORS.map(bgColor=> [`${bgColor}BrBG`, brBg[bgColor].write.bind(brBg)])
+    ANSI_COLORS.map(bgColor=> [`${bgColor}BrBG`, brBg[bgColor].write.bind(brBg[bgColor])])
 ) as {[key in `${COLOR}BrBG`]: Core.BgElem['write']};
 
 /**
@@ -605,7 +605,7 @@ export function ST(style:STYLE):Core.StyleElem['write']{
 };
 
 const styles = Object.fromEntries(
-    ANSI_STYLES.map(style => [style, st[style].write.bind(st)])
+    ANSI_STYLES.map(style => [style, st[style].write.bind(st[style])])
 ) as {[key in STYLE]: Core.StyleElem['write']};
 
 /**
