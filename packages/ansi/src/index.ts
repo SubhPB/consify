@@ -59,73 +59,132 @@ const colors = Object.fromEntries(
 
 /**
  * Applies black text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * black("This text is black.")
+ *
+ * @remarks
+ * 🖍️ ANSI foreground styling is **stateless** — once another color (like `red()`) is applied, it overrides the current one.  
+ * To **persist outer color** after nested styles, reapply the outer one:
+ *
+ * @example
+ * black("Black " + red("Red text") + " Default again")         // ❌ black is lost
+ * black("Black " + red("Red text") + black(" Still black"))    // ✅ correct
+ *
+ * @param {string} string
+ * @param {function} [callbackFn] Optional callback for formatting behavior.
  */
 export const black = colors.black;
 
 /**
  * Applies red text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * red("This text is red.")
+ *
+ * @remarks
+ * 🖍️ Foreground styles do **not persist** across nested colors — if another color like `blue()` is used inside, it will override red.  
+ * Reapply `red()` if you want to continue red afterward:
+ *
+ * @example
+ * red("Red: " + blue("Nested Blue") + red(" Back to Red"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const red = colors.red;
 
 /**
  * Applies green text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * green("This text is green.")
+ *
+ * @remarks
+ * 🖍️ Mixing colors? You’ll need to reset green after applying others.
+ *
+ * @example
+ * green("Green " + magenta("Magenta") + green(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const green = colors.green;
 
 /**
  * Applies yellow text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * yellow("This text is yellow.")
+ *
+ * @remarks
+ * 🖍️ Foreground styles are overridden by nested calls — restore `yellow()` to continue after.
+ *
+ * @example
+ * yellow("Yellow " + red("Red alert") + yellow(" Back to yellow"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const yellow = colors.yellow;
 
 /**
  * Applies blue text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * blue("This text is blue.")
+ *
+ * @remarks
+ * 🖍️ ANSI styles are stateless — nesting will override previous styles.
+ *
+ * @example
+ * blue("Info " + cyan("Hint") + blue(" Continue blue"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const blue = colors.blue;
 
 /**
  * Applies magenta text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * magenta("This text is magenta.")
+ *
+ * @remarks
+ * 🖍️ Reapply magenta after other nested colors to restore effect.
+ *
+ * @example
+ * magenta("Magenta " + green("Inner green") + magenta(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const magenta = colors.magenta;
 
 /**
  * Applies cyan text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * cyan("This text is cyan.")
+ *
+ * @remarks
+ * 🖍️ Nesting other foreground colors removes cyan — reapply to continue.
+ *
+ * @example
+ * cyan("Cyan " + yellow("Note") + cyan(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const cyan = colors.cyan;
 
 /**
  * Applies white text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * white("This text is white.")
+ *
+ * @remarks
+ * 🖍️ Like all other ANSI styles, white gets overridden by nested colors.
+ *
+ * @example
+ * white("White " + blue("Inline blue") + white(" Resumed white"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const white = colors.white;
 
@@ -188,82 +247,135 @@ export function BrCL(color:COLOR):Core.ClElem['write']{
 const brightColors = Object.fromEntries(
     ANSI_COLORS.map(color=>[`${color}Br`, brCl[color].write.bind(brCl[color])])
 ) as {[key in `${COLOR}Br`]: Core.ClElem['write']};
-
 /**
  * Applies bright black (gray) text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * blackBr("This text is bright black (gray).")
+ *
+ * @remarks
+ * 🖍️ ANSI foreground styling is **stateless** — once you apply another color (e.g. `redBr()`), it **overrides** the previous one.  
+ * To maintain outer styling after nested styles, **reapply** the outer style:
+ *
+ * @example
+ * blackBr("Gray " + redBr("Red text") + " Default again")           // ❌ outer gray is lost
+ * blackBr("Gray " + redBr("Red text") + blackBr(" Still gray"))     // ✅ correct
+ *
+ * @param {string} string
+ * @param {function} [callbackFn] Optional callback function for custom control over formatting.
  */
 export const blackBr = brightColors.blackBr;
 
 /**
  * Applies bright red text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * redBr("This text is bright red.")
+ *
+ * @remarks
+ * 🖍️ Foreground colors override each other. For proper nesting, reapply the outer style:
+ *
+ * @example
+ * redBr("Red " + blueBr("Blue text") + redBr(" Still red"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const redBr = brightColors.redBr;
 
 /**
  * Applies bright green text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * greenBr("This text is bright green.")
+ *
+ * @remarks
+ * 🖍️ Reapply outer style if mixing nested colors.
+ *
+ * @example
+ * greenBr("Green " + magentaBr("Magenta") + greenBr(" Green again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const greenBr = brightColors.greenBr;
 
 /**
  * Applies bright yellow text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * yellowBr("This text is bright yellow.")
+ *
+ * @remarks
+ * 🖍️ Nesting overrides styles — reapply outer yellow.
+ *
+ * @example
+ * yellowBr("Yellow " + redBr("Red") + yellowBr(" Yellow again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const yellowBr = brightColors.yellowBr;
 
 /**
  * Applies bright blue text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * blueBr("This text is bright blue.")
+ *
+ * @remarks
+ * 🖍️ Styling is overridden when nesting — reset outer if needed.
+ *
+ * @example
+ * blueBr("Blue " + cyanBr("Cyan") + blueBr(" Blue again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const blueBr = brightColors.blueBr;
 
 /**
  * Applies bright magenta text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * magentaBr("This text is bright magenta.")
+ *
+ * @remarks
+ * 🖍️ Foreground styles are stateless — nesting requires reapplication.
+ *
+ * @example
+ * magentaBr("Magenta " + greenBr("Green") + magentaBr(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const magentaBr = brightColors.magentaBr;
 
 /**
  * Applies bright cyan text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * cyanBr("This text is bright cyan.")
+ *
+ * @remarks
+ * 🖍️ Nested colors override — reapply outer style to restore.
+ *
+ * @example
+ * cyanBr("Cyan " + yellowBr("Yellow") + cyanBr(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const cyanBr = brightColors.cyanBr;
 
 /**
  * Applies bright white text color.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * whiteBr("This text is bright white.")
+ *
+ * @remarks
+ * 🖍️ Styling is non-persistent — reapply white after nesting.
+ *
+ * @example
+ * whiteBr("White " + blueBr("Blue") + whiteBr(" Back to white"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const whiteBr = brightColors.whiteBr;
-
-
-
-
 
 
 
@@ -331,76 +443,137 @@ const bgColors = Object.fromEntries(
     ANSI_COLORS.map(bgColor => [`${bgColor}BG`, bg[bgColor].write.bind(bg[bgColor])])
 ) as {[key in `${COLOR}BG`]: Core.BgElem['write']};
 // export const {blackBG, redBG, greenBG, yellowBG, blueBG, magentaBG, cyanBG, whiteBG} = bgColors;
-
 /**
  * Applies a black background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * blackBG("This text has a black background.")
+ *
+ * @remarks
+ * 🖍️ ANSI background styling is **stateless** — once you apply another background (e.g. `redBG()`), it **overrides** the previous one.  
+ * To maintain outer background after nested backgrounds, **reapply** the outer style:
+ *
+ * @example
+ * blackBG("Black " + redBG("Red BG text") + " Still black")        // ❌ outer black is lost
+ * blackBG("Black " + redBG("Red BG text") + blackBG(" Still black")) // ✅ correct
+ *
+ * @param {string} string
+ * @param {function} [callbackFn] Optional callback to control how escape codes get conjugated with your text.
  */
 export const blackBG = bgColors.blackBG;
 
 /**
  * Applies a red background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * redBG("This text has a red background.")
+ *
+ * @remarks
+ * 🖍️ ANSI background styling is **stateless** — once you apply another background (e.g. `blueBG()`), it **overrides** the previous one.  
+ * To maintain outer background after nested backgrounds, **reapply** the outer style:
+ *
+ * @example
+ * redBG("Red " + blueBG("Blue BG text") + " Still red")        // ❌ outer red is lost
+ * redBG("Red " + blueBG("Blue BG text") + redBG(" Still red")) // ✅ correct
+ *
+ * @param {string} string
+ * @param {function} [callbackFn] Optional callback to control how escape codes get conjugated with your text.
  */
 export const redBG = bgColors.redBG;
 
 /**
  * Applies a green background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * greenBG("This text has a green background.")
+ *
+ * @remarks
+ * 🖍️ ANSI background styling is **stateless** — once you apply another background, it **overrides** the previous one.  
+ * To maintain outer background after nested backgrounds, **reapply** the outer style.
+ *
+ * @example
+ * greenBG("Green " + yellowBG("Yellow") + greenBG(" Green again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const greenBG = bgColors.greenBG;
 
 /**
  * Applies a yellow background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * yellowBG("This text has a yellow background.")
+ *
+ * @remarks
+ * 🖍️ Backgrounds do not stack — applying a new one replaces the previous.  
+ * You must **reapply** the outer background after inner color styles.
+ *
+ * @example
+ * yellowBG("Warning: " + blueBG("Hint") + yellowBG(" !"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const yellowBG = bgColors.yellowBG;
 
 /**
  * Applies a blue background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * blueBG("This text has a blue background.")
+ *
+ * @remarks
+ * 🖍️ Background coloring is stateless. Nesting styles resets the previous. Reapply outer style if needed.
+ *
+ * @example
+ * blueBG("Info: " + redBG("Error") + blueBG(" Back to Info"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const blueBG = bgColors.blueBG;
 
 /**
  * Applies a magenta background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * magentaBG("This text has a magenta background.")
+ *
+ * @remarks
+ * 🖍️ ANSI background codes override each other. Reapply outer magenta if needed.
+ *
+ * @example
+ * magentaBG("Magenta " + cyanBG("Cyan") + magentaBG(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const magentaBG = bgColors.magentaBG;
 
 /**
  * Applies a cyan background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * cyanBG("This text has a cyan background.")
+ *
+ * @remarks
+ * 🖍️ Background styles are overridden by new background calls. Reapply to continue original color.
+ *
+ * @example
+ * cyanBG("Cool " + whiteBG("Highlight") + cyanBG(" Cool again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const cyanBG = bgColors.cyanBG;
 
 /**
  * Applies a white background to your text.
- * @param {string} string
- * @param {function} [callbackFn] Optional callback function that returns a string to control how escape codes get conjugated with your text.
  * @example
  * whiteBG("This text has a white background.")
+ *
+ * @remarks
+ * 🖍️ Background styles reset on new ones. To maintain white background after a nested style, reapply it.
+ *
+ * @example
+ * whiteBG("Light " + blackBG("Dark") + whiteBG(" Light again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const whiteBG = bgColors.whiteBG;
 
@@ -465,73 +638,132 @@ const brightBgColors = Object.fromEntries(
 
 /**
  * Applies a bright black background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * blackBrBG("This text has a bright black background.")
+ *
+ * @remarks
+ * 🖍️ Bright backgrounds behave **statelessly** — applying another background (like `redBrBG()`) **overrides** it.  
+ * To preserve outer color through nested styling, **reapply** the outer style:
+ *
+ * @example
+ * blackBrBG("GrayBG " + redBrBG("RedBG text") + " Default again")             // ❌ outer bright black lost
+ * blackBrBG("GrayBG " + redBrBG("RedBG text") + blackBrBG(" Still grayBG"))   // ✅ correct
+ *
+ * @param {string} string
+ * @param {function} [callbackFn] Optional callback to customize style application.
  */
 export const blackBrBG = brightBgColors.blackBrBG;
 
 /**
  * Applies a bright red background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * redBrBG("This text has a bright red background.")
+ *
+ * @remarks
+ * 🖍️ Like all backgrounds, bright red is **overridden** when nesting other BG styles.  
+ * Use reapplication to keep outer red consistent:
+ *
+ * @example
+ * redBrBG("RedBG " + blueBrBG("BlueBG inside") + redBrBG(" Back to redBG"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const redBrBG = brightBgColors.redBrBG;
 
 /**
  * Applies a bright green background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * greenBrBG("This text has a bright green background.")
+ *
+ * @remarks
+ * 🖍️ Nesting breaks color — use greenBrBG again after inner styles.
+ *
+ * @example
+ * greenBrBG("GreenBG " + magentaBrBG("Magenta") + greenBrBG(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const greenBrBG = brightBgColors.greenBrBG;
 
 /**
  * Applies a bright yellow background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * yellowBrBG("This text has a bright yellow background.")
+ *
+ * @remarks
+ * 🖍️ Backgrounds are stateless — reapply to continue yellow styling after nesting.
+ *
+ * @example
+ * yellowBrBG("Yellow " + redBrBG("Red") + yellowBrBG(" Yellow again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const yellowBrBG = brightBgColors.yellowBrBG;
 
 /**
  * Applies a bright blue background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * blueBrBG("This text has a bright blue background.")
+ *
+ * @remarks
+ * 🖍️ Bright blue will be lost if another background is applied inside.
+ *
+ * @example
+ * blueBrBG("Blue " + cyanBrBG("Cyan") + blueBrBG(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const blueBrBG = brightBgColors.blueBrBG;
 
 /**
  * Applies a bright magenta background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * magentaBrBG("This text has a bright magenta background.")
+ *
+ * @remarks
+ * 🖍️ Reapply outer magenta after any nested BG color to restore.
+ *
+ * @example
+ * magentaBrBG("Magenta " + greenBrBG("Green") + magentaBrBG(" Again"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const magentaBrBG = brightBgColors.magentaBrBG;
 
 /**
  * Applies a bright cyan background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * cyanBrBG("This text has a bright cyan background.")
+ *
+ * @remarks
+ * 🖍️ Nesting another BG color will override cyan — reset if needed.
+ *
+ * @example
+ * cyanBrBG("Cyan " + yellowBrBG("Yellow") + cyanBrBG(" Back to cyan"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const cyanBrBG = brightBgColors.cyanBrBG;
 
 /**
  * Applies a bright white background to your text.
- * @param string
- * @param {function} callbackFn You can either use a callback function that returns a string to control how 'Escape codes' get conjugated with your text.
  * @example
  * whiteBrBG("This text has a bright white background.")
+ *
+ * @remarks
+ * 🖍️ ANSI styling resets on next background — reapply for consistency.
+ *
+ * @example
+ * whiteBrBG("White " + blueBrBG("Blue") + whiteBrBG(" Again white"))
+ *
+ * @param {string} string
+ * @param {function} [callbackFn]
  */
 export const whiteBrBG = brightBgColors.whiteBrBG;
 
