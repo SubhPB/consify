@@ -1,10 +1,10 @@
 //CMD npx ts-node --project tsconfigs/tsconfig.base.json ./src/index.ts
-import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS} from "./shared/constants.ts";
+import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS, RESET_BG_CODE, RESET_FG_CODE, RESET_ST_CODES} from "./shared/constants.ts";
 import type {COLOR, STYLE} from './shared/types.ts'
 
 class BASE {
-    protected props : typeof DEFAULT_ANSI_PARAMETERS;
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    protected props : Partial<typeof DEFAULT_ANSI_PARAMETERS>;
+    constructor(props={}){
         this.props=props
     };
     inspectProps(){
@@ -14,15 +14,52 @@ class BASE {
 
 /**Goal: To provide more features, customization over output string to the end user */
 class BasePen extends BASE {
-    constructor(props=DEFAULT_ANSI_PARAMETERS,){
+    constructor(props={},){
         super(props);
     };
+    protected escapeCode(code:number){
+        return `\x1b[${code}m`
+    };
+    protected resetCode(prop:Required<keyof typeof this.props>, code:number){
+        //Generate appropriate resetCode for each prop
+        let resetCode: undefined|number;
+        if (prop in this.props){
+            switch (prop) {
+                case 'ST':
+                    resetCode = RESET_ST_CODES[code];
+                    break;
+                case 'FG':
+                    resetCode = RESET_FG_CODE;
+                    break;
+                case 'BG':
+                    resetCode = RESET_BG_CODE;
+                    break;
+                default:
+                    break;
+            };
+        };
+        return resetCode;
+    }
     get prefix(){
-        const {ST,FG,BG} = this.props;
-        return `\x1b[${ST};${FG};${BG}m`
+        let pf = '';
+        for(let prop of ['ST','FG','BG']){
+            if (
+                prop in this.props && Number.isInteger(this.props[prop])
+            ) pf += this.escapeCode(this.props[prop])
+        };
+        return pf;
     };
     get suffix(){
-        return `\x1b[0m`;``
+        let sf = '';
+        for(let prop of ['ST','FG','BG']){
+            if (
+                prop in this.props && Number.isInteger(this.props[prop])
+            ){
+                const resetCode = this.resetCode(prop as (keyof typeof this.props),this.props[prop]);
+                if (resetCode!==undefined&&Number.isInteger(resetCode)) sf += this.escapeCode(resetCode);
+            };
+        };
+        return sf;
     };
     getCallbackParams(){
         const params = {
@@ -39,7 +76,7 @@ class BasePen extends BASE {
 
 //Note: only a base/element or subClient can extend a Client
 abstract class BaseClient extends BASE {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
     write(textOrCallback:(string | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
@@ -53,13 +90,13 @@ abstract class BaseClient extends BASE {
 
 //Color-client, features offered by text-coloring
 abstract class ClClient extends BaseClient {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
 };
 //Color-element e.g. red, blue etc which utilize Color-client
 class ClElem extends ClClient {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
 };
@@ -69,7 +106,7 @@ abstract class AbstractCL extends BASE {
     protected calcFG(ci:number){
         return this.offset+ci;
     }
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         for(let ci=0; ci<ANSI_COLORS.length; ci++){
             const color = ANSI_COLORS[ci];
@@ -86,14 +123,14 @@ interface AbstractCL extends Record<COLOR, ClElem> {};
 //Containing all regular text colors
 class CL extends AbstractCL {
     protected get offset(){return CL_OFFSET};
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
     }
 };
 //Containing all bright text colors
 class BrCL extends AbstractCL {
     protected get offset(){return BR_CL_OFFSET};
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
     }
 };
@@ -103,7 +140,7 @@ class BrCL extends AbstractCL {
 abstract class BgClient extends CL {
     protected _br: BrCL; //For chaining of bright text color
     get br(){return this._br};
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         this._br = new BrCL(props)
     };
@@ -117,7 +154,7 @@ abstract class BgClient extends CL {
 };
 //background-color entity e.g red, black, yellow etc
 class BgElem extends BgClient {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
 };
@@ -127,7 +164,7 @@ abstract class AbstractBG extends BASE {
     protected calcBG(ci:number){
         return this.offset+ci;
     }
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         for(let ci=0; ci<ANSI_COLORS.length; ci++){
             const color = ANSI_COLORS[ci];
@@ -144,14 +181,14 @@ interface AbstractBG extends Record<COLOR, BgElem> {};
 //Containing all regular bg colors
 class BG extends AbstractBG {
     protected get offset(){return BG_OFFSET};
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
 };
 //Containing all bright bg colors
 class BrBG extends AbstractBG {
     protected get offset(){return BR_BG_OFFSET};
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
 };
@@ -162,7 +199,7 @@ class BrBG extends AbstractBG {
      * <underline>.blue.write(text)
  */
 abstract class StyleBaseClient extends CL {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
     };
     write(textOrCallback:(string | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
@@ -186,7 +223,7 @@ abstract class StyleBaseClient extends CL {
 class StyleBr extends BrCL {
     protected _brBg: BrBG;
     get bg(){return this._brBg}
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         this._brBg = new BrBG(props)
     }
@@ -210,7 +247,7 @@ abstract class StyleClient extends StyleBaseClient {
     get br(){return this.styleBr};
     get bg(){return this.styleBg};
     get brBg(){return this.styleBrBg}
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         this.styleBr = new StyleBr(props);
         this.styleBg = new BG(props);
@@ -219,14 +256,14 @@ abstract class StyleClient extends StyleBaseClient {
 };
 // style-elements are like e.g. <underline>, <reverse>, <hidden> and more...
 class StyleElem extends StyleClient {
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     };
 };
 
 class Style extends BASE {
     protected calcST(si:number){return si;}
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         for(let si=0; si<ANSI_STYLES.length; si++){
             const style = ANSI_STYLES[si];
@@ -247,20 +284,20 @@ interface Style extends Record<STYLE, StyleElem> {};
  */
 class IceBurgBASE extends StyleClient {
     //To inject features like: ANSI.red, ANSI.bg..., ANSI.br..., ANSI.br.bg... etc
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
     };
 };
 class IceBurgStyleElem extends StyleClient {
     //To inject style features like: ANSI.underline..., ANSI.bold.br... etc
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props)
     }
 };
 
 class IceBurg extends IceBurgBASE {
     protected calcST(si:number){return si;}
-    constructor(props=DEFAULT_ANSI_PARAMETERS){
+    constructor(props={}){
         super(props);
         for(let si=0; si<ANSI_STYLES.length; si++){
             const style = ANSI_STYLES[si];
