@@ -923,6 +923,30 @@ export const hidden = styles.hidden;
 export const strikethrough = styles.strikethrough;
 
 
-/************ Offers all functionalities in one-line chain ************/
+/**
+ * Offers complete ANSI styling control through a single chainable root API.
+ *
+ * @example
+ * clx.red.write("This text is red.");
+ * clx.bg.green.write("This text has a green background.");
+ * clx.brBg.green.write("This text has a bright green background.");
+ * clx.bold.red.write("This text is bold and red.");
+ * clx.bold.bg.red.br.yellow.write("This text is bold, has red background and bright yellow color.");
+ * clx.bold.bg.yellow.blue.write("Bold text with yellow background and blue foreground.");
+ *
+ * @remarks
+ * ✅ Chain styles, background colors, and text colors in a single line.  
+ * ✅ Supports both regular and bright backgrounds or foregrounds.  
+ * ✅ Provides direct access to styles (`bold`, `italic`, `underline`, etc.), colors (`red`, `blue`, etc.), and backgrounds (`bg.red`, `brBg.blue`, etc.).
+ * ✅ Fully supports deep chaining like `clx.bold.bg.red.blue.write("...")`.
+ *
+ * 🖍️ ANSI styling is **stateless** — applying a new foreground or background overrides the previous one.  
+ * To maintain outer styling after applying nested colors or styles, **reapply** the outer style explicitly.
+ *
+ * @example
+ * clx.red.write("Red " + clx.blue.write("Blue text") + " Default again"); // ❌ outer red lost
+ * clx.red.write("Red " + clx.blue.write("Blue text") + clx.red.write(" Still red")); // ✅ correct
+ */
 const clx = new Core.IceBurg();
 export default clx;
+
