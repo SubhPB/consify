@@ -947,6 +947,7 @@ export const strikethrough = styles.strikethrough;
  * clx.red.write("Red " + clx.blue.write("Blue text") + " Default again"); // ❌ outer red lost
  * clx.red.write("Red " + clx.blue.write("Blue text") + clx.red.write(" Still red")); // ✅ correct
  */
-const clx = new Core.IceBurg();
+const clx: Omit<Core.IceBurg, 'log'> = new Core.IceBurg();
 export default clx;
+
 
