@@ -1,4 +1,5 @@
 //CMD npx ts-node --project tsconfigs/tsconfig.base.json ./src/index.ts
+import { interfaces } from "mocha";
 import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS, RESET_BG_CODE, RESET_FG_CODE, RESET_ST_CODES} from "./shared/constants.ts";
 import type {COLOR, STYLE} from './shared/types.ts'
 
@@ -69,7 +70,7 @@ class BasePen extends BASE {
         };
         return params;
     };
-    compose(writableInp:string){
+    compose(writableInp:string|number){
         return `${this.prefix}${writableInp}${this.suffix}`
     }
 }
@@ -79,13 +80,25 @@ abstract class BaseClient extends BASE {
     constructor(props={}){
         super(props)
     };
-    write(textOrCallback:(string | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
+    write(textOrCallback:(string | number | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
         const pen = new BasePen(this.props);
         if (typeof textOrCallback === 'function'){
             return textOrCallback(pen.getCallbackParams())
         };
         return pen.compose(textOrCallback)
-    } 
+    };
+    log(...args:Parameters<typeof console.log>){
+        const newArgs:typeof args = args.map(
+            arg => {
+                if (['string','number'].some(type => typeof arg === type)){
+                    return this.write(arg)
+                } else {
+                    return arg
+                }
+            }
+        )
+        console.log(...newArgs);
+    }
 }
 
 //Color-client, features offered by text-coloring
@@ -144,13 +157,25 @@ abstract class BgClient extends CL {
         super(props);
         this._br = new BrCL(props)
     };
-    write(textOrCallback:(string | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
+    write(textOrCallback:(string | number | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
         const pen = new BasePen(this.props);
         if (typeof textOrCallback === 'function'){
             return textOrCallback(pen.getCallbackParams())
         };
         return pen.compose(textOrCallback)
     };
+    log(...args:Parameters<typeof console.log>){
+        const newArgs:typeof args = args.map(
+            arg => {
+                if (['string','number'].some(type => typeof arg === type)){
+                    return this.write(arg)
+                } else {
+                    return arg
+                }
+            }
+        )
+        console.log(...newArgs);
+    }
 };
 //background-color entity e.g red, black, yellow etc
 class BgElem extends BgClient {
@@ -202,13 +227,25 @@ abstract class StyleBaseClient extends CL {
     constructor(props={}){
         super(props);
     };
-    write(textOrCallback:(string | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
+    write(textOrCallback:(string | number | ((callbackArgs:ReturnType<BasePen['getCallbackParams']>)=>string))){
         const pen = new BasePen(this.props);
         if (typeof textOrCallback === 'function'){
             return textOrCallback(pen.getCallbackParams())
         };
         return pen.compose(textOrCallback)
     };
+    log(...args:Parameters<typeof console.log>){
+        const newArgs:typeof args = args.map(
+            arg => {
+                if (['string','number'].some(type => typeof arg === type)){
+                    return this.write(arg)
+                } else {
+                    return arg
+                }
+            }
+        )
+        console.log(...newArgs);
+    }
 };
 
 /**
@@ -282,12 +319,13 @@ interface Style extends Record<STYLE, StyleElem> {};
  * IceBurg: contains every single feature offered in this whole package,
  * Rather than injecting features directly from others, will inject by using additional IceBurg layers
  */
-class IceBurgBASE extends StyleClient {
+class IceBurgBASE extends StyleClient{
     //To inject features like: ANSI.red, ANSI.bg..., ANSI.br..., ANSI.br.bg... etc
     constructor(props={}){
         super(props);
     };
 };
+
 class IceBurgStyleElem extends StyleClient {
     //To inject style features like: ANSI.underline..., ANSI.bold.br... etc
     constructor(props={}){
@@ -311,5 +349,6 @@ class IceBurg extends IceBurgBASE {
     }
 };
 interface IceBurg extends Record<STYLE, IceBurgStyleElem>{};
+
 
 export {BG, BrBG, BrCL, CL, Style, ClElem, BgElem, StyleElem, StyleBr, IceBurgStyleElem, IceBurg}
