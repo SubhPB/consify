@@ -9,9 +9,7 @@
         "declaration": true, /*Generate *.d.ts file*/
         "declarationMap": true, /*Generates source maps for declaration map, would allow dev to trace location of where type is created*/
         "allowSyntheticDefaultImports": true, /*Where esModuleInterop also make changes in the generated runtime code, but allowSyntheticDefaultImports doesn't effect runtime, only works during development for type checking*/
+        "allowImportingTsExtensions": true,
     },
-    "files": [
-        /*Ls of files to include in compilation*/
-        "../src/*"
-    ]
+    "include": ["../src/**/*.ts"],
 }

@@ -3,8 +3,7 @@
     "compilerOptions": {
         "lib": ["ES2022"],
         "target": "ES2022", /*JS version*/
-        "module": "ESNext", /*File format*/
-        "moduleResolution": "nodenext", /*Supports both *mjs/js files*/
+        "module": "NodeNext", /*File format*/
         "outDir": "../lib/esm",
         "declarationDir": "../lib/esm/types"
     }
