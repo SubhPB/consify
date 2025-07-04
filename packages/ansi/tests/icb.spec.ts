@@ -35,8 +35,8 @@ describe("Checking that 'icb' has methods which it supposed to have", ()=>{
     it("Testing instance and props of 'icb' ", ()=>{
         expect(icb).to.be.an.instanceof(IceBurg);
         const params = icb.inspectProps();
-
-        Object.keys(DEFAULT_ANSI_PARAMETERS).forEach(param => {
+        
+        (Object.keys(DEFAULT_ANSI_PARAMETERS) as Array<keyof typeof params>).forEach(param => {
             expect(params[param]).to.equal(undefined)
         });
     });
