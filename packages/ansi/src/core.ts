@@ -1,5 +1,5 @@
 //CMD npx ts-node --project tsconfigs/tsconfig.base.json ./src/index.ts
-import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS, RESET_BG_CODE, RESET_FG_CODE, RESET_ST_CODES} from "./shared/constants.ts";
+import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS, PARAM_KEYS, RESET_BG_CODE, RESET_FG_CODE, RESET_ST_CODES} from "./shared/constants.ts";
 import type {COLOR, STYLE} from './shared/types.ts'
 
 class BASE {
@@ -42,21 +42,19 @@ class BasePen extends BASE {
     }
     get prefix(){
         let pf = '';
-        for(let prop of ['ST','FG','BG']){
-            if (
-                prop in this.props && Number.isInteger(this.props[prop])
-            ) pf += this.escapeCode(this.props[prop])
+        for(let prop of PARAM_KEYS){
+            const code = this.props[prop];
+            if (typeof code === "number") pf += this.escapeCode(code);
         };
         return pf;
     };
     get suffix(){
         let sf = '';
-        for(let prop of ['ST','FG','BG']){
-            if (
-                prop in this.props && Number.isInteger(this.props[prop])
-            ){
-                const resetCode = this.resetCode(prop as (keyof typeof this.props),this.props[prop]);
-                if (resetCode!==undefined&&Number.isInteger(resetCode)) sf += this.escapeCode(resetCode);
+        for(let prop of PARAM_KEYS){
+            const code = this.props[prop];
+            if (typeof code === "number"){
+                const reset = this.resetCode(prop, code);
+                if (typeof reset === "number") sf += this.escapeCode(reset)
             };
         };
         return sf;
