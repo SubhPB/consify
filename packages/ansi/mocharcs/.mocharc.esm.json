@@ -1,0 +1,6 @@
+{
+  "spec": "./lib/esm/tests/*.spec.js",
+
+  "extension": ["js"],     
+  "reporter": "spec"        
+}

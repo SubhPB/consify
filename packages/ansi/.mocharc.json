@@ -1,8 +1,0 @@
-{
-    "extension": ["ts"], 
-    "spec": "./*/*.spec.ts",
-    "require": "ts-node/register",
-    "env": {
-        "TS_NODE_PROJECT": "./tsconfigs/tsconfig.base.json"
-    }
-}
