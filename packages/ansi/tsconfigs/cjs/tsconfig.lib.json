@@ -1,0 +1,10 @@
+{
+    "extends":"./tsconfig.base.json",
+    "compilerOptions": {
+        "declaration": true,
+        "declarationMap": true,
+        "declarationDir": "../../lib/cjs/types"
+    },
+    "include": ["../../src/**/*.ts"],
+    "exclude": ["../../src/tests/**"]
+}

@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "target": "ES2020", /*JS version*/
+        "declaration": false,
+        "declarationMap": false,
+        "noImplicitAny": false
+    },
+    "include": ["../../src/tests/**/*"]
+}

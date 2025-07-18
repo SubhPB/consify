@@ -6,10 +6,7 @@
         "skipLibCheck": true, /*Skip type checking for declaration file (*.d.ts)*/
         "checkJs": true, /*Enable type checking for JS files too*/
         "allowJs": true, /*Allow JS files to also be a part of compilation*/
-        "declaration": true, /*Generate *.d.ts file*/
-        "declarationMap": true, /*Generates source maps for declaration map, would allow dev to trace location of where type is created*/
         "allowSyntheticDefaultImports": true, /*Where esModuleInterop also make changes in the generated runtime code, but allowSyntheticDefaultImports doesn't effect runtime, only works during development for type checking*/
-        "allowImportingTsExtensions": true,
-    },
-    "include": ["../src/**/*.ts"],
+        // "allowImportingTsExtensions": true,
+    }
 }
