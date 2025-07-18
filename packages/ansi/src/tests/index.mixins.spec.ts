@@ -1,9 +1,9 @@
 
 import { it, describe } from 'mocha';
 import { expect } from 'chai';
-import * as Index from '../src/index.ts';
-import type { COLOR, STYLE } from '../src/shared/types.ts';
-import { ANSI_COLORS, ANSI_STYLES } from '../src/shared/constants.ts';
+import * as Index from '../index.js';
+import type { COLOR, STYLE } from '../shared/types.js';
+import { ANSI_COLORS, ANSI_STYLES } from '../shared/constants.js';
 
 /**
  * Testing behavior of APIs when used together
@@ -24,7 +24,7 @@ const NestedColorsFG = () => {
                     const opt = Index[color](
                         Index[c2](inp)
                     );
-                    const callFnOpt = Index[color](
+                    const callFnOpt = Index[color as any](
                         ({prefix:parentPrefix, suffix:parentSuffix})=>{
                             return parentPrefix + Index[c2](
                                 ({prefix:childPrefix, suffix:childSuffix}) => {

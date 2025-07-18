@@ -1,7 +1,7 @@
-import { ClElem, BrCL, BgElem, BG, BrBG } from "../src/core.ts";
+import { ClElem, BrCL, BgElem, BG, BrBG } from "../core.js";
 import { expect } from "chai";
-import { ANSI_COLORS, BG_OFFSET, BR_BG_OFFSET, CL_OFFSET, BR_CL_OFFSET, DEFAULT_ANSI_PARAMETERS} from "../src/shared/constants.ts";
-import type { COLOR } from "../src/shared/types.ts";
+import { ANSI_COLORS, BG_OFFSET, BR_BG_OFFSET, CL_OFFSET, BR_CL_OFFSET, DEFAULT_ANSI_PARAMETERS} from "../shared/constants.js";
+import type { COLOR } from "../shared/types.js";
 
 const bgElem = new BgElem(), bg = new BG(), brBg = new BrBG();
 

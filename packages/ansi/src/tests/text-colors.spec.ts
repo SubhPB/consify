@@ -1,7 +1,7 @@
-import { ClElem, CL, BrCL } from "../src/core.ts";
-import { ANSI_COLORS, CL_OFFSET, BR_CL_OFFSET } from "../src/shared/constants.ts";
+import { ClElem, CL, BrCL } from "../core.js";
+import { ANSI_COLORS, CL_OFFSET, BR_CL_OFFSET } from "../shared/constants.js";
 import { expect } from "chai";
-import type { COLOR } from "../src/shared/types.ts";
+import type { COLOR } from "../shared/types.js";
 
 const cl = new CL(), brCl = new BrCL();
 

@@ -1,8 +1,8 @@
-import { ANSI_COLORS, ANSI_STYLES } from "../src/shared/constants.ts";
+import { ANSI_COLORS, ANSI_STYLES } from "../shared/constants.js";
 import { expect } from "chai";
 import { describe } from "mocha";
-import * as Index from '../src/index.ts';
-import { BG, BgElem, BrBG, ClElem, IceBurg, IceBurgStyleElem, StyleElem } from "../src/core.ts";
+import * as Index from '../index.js';
+import { BG, BgElem, BrBG, ClElem, IceBurg, IceBurgStyleElem, StyleElem } from "../core.js";
 
 /**
  * Tests:- cl, CL, red, black, green, ... white.

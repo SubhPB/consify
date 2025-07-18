@@ -1,7 +1,7 @@
-import { ClElem, IceBurg, IceBurgStyleElem, StyleBr, BG, BrBG, BgElem, BrCL } from "../src/core.ts";
+import { ClElem, IceBurg, IceBurgStyleElem, StyleBr, BG, BrBG, BgElem, BrCL } from "../core.js";
 import { expect } from "chai";
 import { describe, it } from "mocha";
-import { ANSI_STYLES, ANSI_COLORS, DEFAULT_ANSI_PARAMETERS, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET } from "../src/shared/constants.ts";
+import { ANSI_STYLES, ANSI_COLORS, DEFAULT_ANSI_PARAMETERS, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET } from "../shared/constants.js";
 
 const icb = new IceBurg();
 const expectedProps = (

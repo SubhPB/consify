@@ -1,7 +1,6 @@
 import { expect } from "chai";
-import { ANSI_STYLES, ANSI_COLORS, } from "../src/shared/constants.ts";
-import { Style, StyleElem, StyleBr, BG, ClElem, BrBG, BgElem } from "../src/core.ts";
-import { BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET } from "../src/shared/constants.ts";
+import { Style, StyleElem, StyleBr, BG, ClElem, BrBG, BgElem } from "../core.js";
+import { ANSI_STYLES, ANSI_COLORS, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET } from "../shared/constants.js";
 
 const stElem = new StyleElem();
 const style = new Style();
