@@ -1,6 +1,6 @@
-import * as Core from './core.ts';
-import { ANSI_COLORS, ANSI_STYLES } from './shared/constants.ts';
-import type { COLOR, STYLE } from './shared/types.ts';
+import * as Core from './core.js';
+import { ANSI_COLORS, ANSI_STYLES } from './shared/constants.js';
+import type { COLOR, STYLE } from './shared/types.js';
 
 
 /**
