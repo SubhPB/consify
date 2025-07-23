@@ -4,37 +4,39 @@
   "publishConfig": {
     "access": "public"
   },
+  "type":"module",
   "version": "1.0.0",
-  "main": "./lib/esm/index.mjs",
+  "main": "./lib/esm/index.js",
   "types": "./lib/esm/types/index.d.ts",
   "scripts": {
-    "test:esm": "npx mocha --config mocharcs/.mocharc.esm.json",
-    "test:cjs": "npx mocha --config mocharcs/.mocharc.cjs.json",
-    "test": "npm run test:esm && npm run test:cjs",
-
+    
     "clean": "if exist lib rmdir /s /q lib",
-
+    "clean:tests": "if exist \"lib\\esm\\tests\" rmdir /s /q \"lib\\esm\\tests\"",
+    
     "build:esm:tests": "tsc -p ./tsconfigs/esm/tsconfig.tests.json",
-    "build:esm": "tsc -p ./tsconfigs/esm/tsconfig.lib.json && rename \"lib\\esm\\index.js\" index.mjs",
-
     "build:cjs:tests": "tsc -p ./tsconfigs/cjs/tsconfig.tests.json",
-    "build:cjs": "tsc -p ./tsconfigs/cjs/tsconfig.lib.json",
+    
+    "build:esm": "tsc -p ./tsconfigs/esm/tsconfig.lib.json",
+    "build:cjs": "tsc -p ./tsconfigs/cjs/tsconfig.lib.json && rename \"lib\\cjs\\index.js\" index.cjs",
+    
+    "build:tests": "npm run build:esm:tests",
 
-    "build:tests": "npm run build:esm:tests && npm run build:cjs:tests",
+    "test:esm": "npx mocha --config mocharcs/.mocharc.esm.json",
+    "test": "npm run build:esm:tests && npm run test:esm && npm run clean:tests",
+  
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run test",
 
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:tests",
-   
     "prepack": "npm run build"
   },
   "exports": {
     ".": {
       "import": {
         "types": "./lib/esm/types/index.d.ts",
-        "default": "./lib/esm/index.mjs"
+        "default": "./lib/esm/index.js"
       },
       "require": {
         "types": "./lib/cjs/types/index.d.ts",
-        "default": "./lib/cjs/index.js"
+        "default": "./lib/cjs/index.cjs"
       }
     }
   },

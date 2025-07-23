@@ -1,2 +1,2 @@
-lib/*/tests/*
+lib/*/tests/*.spec.js
 *.spec.js
