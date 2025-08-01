@@ -1,5 +1,5 @@
 {
-  "spec": "./lib/esm/tests/*.spec.js",
+  "spec": "lib/**/*.spec.js",
 
   "extension": ["js"],     
   "reporter": "spec"        

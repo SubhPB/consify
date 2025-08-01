@@ -1,6 +1,0 @@
-{
-  "spec": "./lib/cjs/tests/*.spec.js",
-
-  "extension": ["js"],     
-  "reporter": "spec"        
-}
