@@ -1,4 +1,3 @@
-//CMD npx ts-node --project tsconfigs/tsconfig.base.json ./src/index.ts
 import { ANSI_COLORS, ANSI_STYLES, BG_OFFSET, BR_BG_OFFSET, BR_CL_OFFSET, CL_OFFSET, DEFAULT_ANSI_PARAMETERS, PARAM_KEYS, RESET_BG_CODE, RESET_FG_CODE, RESET_ST_CODES} from "./shared/constants.js";
 import type {COLOR, STYLE} from './shared/types.js'
 
