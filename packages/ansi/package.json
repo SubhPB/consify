@@ -1,6 +1,6 @@
 {
   "name": "@consify/ansi",
-  "private": "false",
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -62,9 +62,10 @@
     "ink",
     "nodejs"
   ],
-  "author": "@byimaan/SubhPB",
+  "author": "@Byimaan/SubhPB",
   "license": "ISC",
-  "description": "",
+  "repository":"https://github.com/SubhPB/consify/tree/main/packages/ansi",
+  "description": "@consify/ansi — a zero-dependency toolkit for styling terminal text with colors, backgrounds, and effects. Perfect for developers who want simple, readable, and expressive CLI output.",
   "devDependencies": {
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
