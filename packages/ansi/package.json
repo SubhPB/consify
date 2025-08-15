@@ -4,9 +4,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
-  "main": "./lib/cjs/index.js",
-  "types": "./lib/cjs/types/index.d.ts",
+  "version": "1.0.1",
+  "main": "./lib/cjs/index.cjs",
+  "types": "./lib/cjs/types/index.d.cts",
   "scripts": {
     
     "clean": "if exist lib rmdir /s /q lib",
@@ -14,9 +14,12 @@
     
     "build:esm:tests": "tsc -p ./tsconfigs/esm/tsconfig.tests.json",
     "build:cjs:tests": "tsc -p ./tsconfigs/cjs/tsconfig.tests.json",
+
+    "build:esm:ext:rename": "rename \"lib\\esm\\index.js\" index.mjs && rename \"lib\\esm\\types\\index.d.ts\" index.d.mts",
+    "build:cjs:ext:rename": "rename \"lib\\cjs\\index.js\" index.cjs && rename \"lib\\cjs\\types\\index.d.ts\" index.d.cts",
     
-    "build:esm": "tsc -p ./tsconfigs/esm/tsconfig.lib.json && rename \"lib\\esm\\index.js\" index.mjs",
-    "build:cjs": "tsc -p ./tsconfigs/cjs/tsconfig.lib.json",
+    "build:esm": "tsc -p ./tsconfigs/esm/tsconfig.lib.json && npm run build:esm:ext:rename",
+    "build:cjs": "tsc -p ./tsconfigs/cjs/tsconfig.lib.json && npm run build:cjs:ext:rename",
     
     "build:tests": "npm run build:esm:tests",
 
@@ -30,12 +33,12 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./lib/esm/types/index.d.ts",
+        "types": "./lib/esm/types/index.d.mts",
         "default": "./lib/esm/index.mjs"
       },
       "require": {
-        "types": "./lib/cjs/types/index.d.ts",
-        "default": "./lib/cjs/index.js"
+        "types": "./lib/cjs/types/index.d.cts",
+        "default": "./lib/cjs/index.cjs"
       }
     }
   },
